@@ -17,4 +17,5 @@ class School extends Model
         'email',
         'description',
     ];
+    
 }

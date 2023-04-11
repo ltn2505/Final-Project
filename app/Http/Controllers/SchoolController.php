@@ -15,8 +15,8 @@ class SchoolController extends Controller
     public function index()
     {
         //
-        $school=School::paginate(5);
-        return view('school.school',compact('school'));
+        $school=School::paginate(10);
+        return view('school.index',compact('school'));
     }
 
     /**
@@ -40,7 +40,7 @@ class SchoolController extends Controller
     {
         //
         School::create($request->all());
-        return redirect()->route('school.index')->with('notification', 'Successfully added new.');
+        return redirect()->back()->with('notification', 'Successfully added new school.');
     }
 
     /**
@@ -91,7 +91,5 @@ class SchoolController extends Controller
         //
         $school->delete();
         return redirect()->route('school.index')->with('notification','Successfully deleted account');
-
-
     }
 }

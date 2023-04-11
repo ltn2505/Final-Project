@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Student;
+use App\Models\School;
+use App\Models\User;
+use Illuminate\Foundation\Auth\User as AuthUser;
+use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
@@ -14,6 +19,10 @@ class StudentController extends Controller
     public function index()
     {
         //
+        $student = Student::with('school')->get();
+        $student = Student::with('user')->get();
+        $student=Student::paginate(50);
+        return view('student.index',compact('student'));
     }
 
     /**
@@ -24,6 +33,8 @@ class StudentController extends Controller
     public function create()
     {
         //
+        $school = School::all();
+        return view('student.create',compact('school'));
     }
 
     /**
@@ -35,6 +46,8 @@ class StudentController extends Controller
     public function store(Request $request)
     {
         //
+        Student::create($request->all());
+        return redirect()->route('student.index')->with('notification', 'Successfully added new.');
     }
 
     /**
@@ -54,9 +67,11 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Student $student)
     {
         //
+        $school = School::all();
+        return view('student.update',compact('student','school'));
     }
 
     /**
@@ -66,9 +81,11 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Student $student)
     {
         //
+        $student->update($request->all());
+        return redirect()->route('student.edit',$student->id)->with('notification','Successfully edited account');
     }
 
     /**
@@ -77,8 +94,29 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Student $student)
     {
         //
+        $student->delete();
+        return redirect()->route('student.index')->with('notification','Successfully deleted account');
+    }
+
+    public function importForm()
+    {
+        $school = School::all();
+        return view('student.import',compact('school'));
+    }
+
+    public function import(Request $request)
+    {
+        $schoolId = $request->input('school');
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        $filename = $request->file('file')->getRealPath();
+        Student::importFromExcel($filename,$schoolId);
+
+        return redirect()->route('student.index')->with('notification', 'Students imported successfully!');
     }
 }

@@ -5,6 +5,15 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
+                    @if (Session::has('notification'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ Session::get('notification') }}
+                        <button style="float: right; border:none; background:none;" type="button" class="close"
+                            data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                     <div class="card-header">{{ __('Create new school') }}</div>
 
                     <div class="card-body">
@@ -12,7 +21,8 @@
                             @csrf
 
                             <div class="row mb-3">
-                                <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('School Name') }}</label>
+                                <label for="name"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('School Name') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="school_name" type="text"
@@ -28,7 +38,8 @@
                             </div>
 
                             <div class="row mb-3">
-                                <label for="address" class="col-md-4 col-form-label text-md-end">{{ __('Address') }}</label>
+                                <label for="address"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Address') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="address" type="text"
@@ -44,7 +55,8 @@
                             </div>
 
                             <div class="row mb-3">
-                                <label for="headmaster" class="col-md-4 col-form-label text-md-end">{{ __('Headmaster') }}</label>
+                                <label for="headmaster"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Headmaster') }}</label>
 
                                 <div class="col-md-6">
                                     <input id="headmaster" type="text"
@@ -117,15 +129,9 @@
                                     class="col-md-4 col-form-label text-md-end">{{ __('Description') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="description" type="text"
-                                        class="form-control @error('description') is-invalid @enderror" name="description"
-                                        value="{{ old('description') }}" autocomplete="description" autofocus>
-
-                                    @error('description')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                    <div class="form-floating">
+                                        <textarea name="description" class="form-control" id="description" style="height: 150px;"></textarea>
+                                    </div>
                                 </div>
                             </div>
 

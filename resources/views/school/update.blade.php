@@ -116,21 +116,14 @@
                                     @enderror
                                 </div>
                             </div>
-
                             <div class="row mb-3">
                                 <label for="description"
                                     class="col-md-4 col-form-label text-md-end">{{ __('Description') }}</label>
 
                                 <div class="col-md-6">
-                                    <input id="description" type="text"
-                                        class="form-control @error('description') is-invalid @enderror" name="description"
-                                        value="{{ $school->description }}" autocomplete="description" autofocus>
-
-                                    @error('description')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                    <div class="form-floating">
+                                        <textarea name="description" class="form-control" id="description"style="height: 150px;">{{ $school->description }}"</textarea>
+                                    </div>
                                 </div>
                             </div>
 

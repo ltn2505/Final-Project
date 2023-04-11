@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+
 class UserController extends Controller
 {
     /**
@@ -60,8 +63,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //
-        return view('auth.update',compact('user'));
-
+        return view('auth.update', compact('user'));
     }
 
     /**
@@ -74,9 +76,24 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         //
-        $user->update($request->all());
-        return redirect()->route('user.edit',Auth::user()->id)->with('notification','Successfully edited account');
+        $input = $request->all();
+        if ($user->image) {
+            // Get the path to the old image
+            $oldImagePath = public_path('img').$user->image;
 
+            // Delete the old image
+            Storage::delete($oldImagePath);
+        }
+        if($image=$request->file('image')){
+            $destinationPath=public_path('img');
+            $userImage=date('YmdHis').".".$image->getClientOriginalExtension();
+            $image->move($destinationPath,$userImage);
+            $input['image']=$userImage;
+        }else{
+            unset($input['image']);
+        }
+        $user->update($input);
+        return redirect()->route('user.edit', $user->id)->with('notification', 'Successfully edited account');
     }
 
     /**
@@ -89,6 +106,6 @@ class UserController extends Controller
     {
         //
         $user->delete();
-        return redirect()->route('home')->with('notification','Successfully deleted account');
+        return redirect()->route('home')->with('notification', 'Successfully deleted account');
     }
 }

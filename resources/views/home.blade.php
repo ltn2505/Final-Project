@@ -74,7 +74,11 @@
         <div class="bg-light text-center rounded p-4">
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <h6 class="mb-0">Manage User</h6>
-                <a href="">Show All</a>
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">+
+                        Create new</a>
+                @endif
+
             </div>
             <div class="table-responsive">
                 @if (Session::has('notification'))
@@ -99,10 +103,7 @@
                             <th scope="col">Role</th>
                             <th scope="col">Manager</th>
                             <th scope="col">
-                                @if (Route::has('register'))
-                                    <a href="{{ route('register') }}"
-                                        class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">+ Create new</a>
-                                @endif
+                                Action
                             </th>
                         </tr>
                     </thead>
@@ -120,10 +121,12 @@
                                 <td>{{ $us->manager }}</td>
                                 <td>
                                     <form action="{{ route('user.destroy', $us->id) }}" method="POST">
-                                        <a href="{{ route('user.edit', $us->id) }}" class="btn btn-info">Edit</a>
+                                        <a href="{{ route('user.edit', $us->id) }}" class="btn btn-info"><i
+                                                class="bi bi-pencil"></i></a>
                                         @csrf
                                         @method('DELETE')
-                                        <button onclick="return confirm('Are you sure?')" type="submit" class="btn btn-danger">Delete</button>
+                                        <button onclick="return confirm('Are you sure?')" type="submit"
+                                            class="btn btn-danger"><i class="bi bi-trash"></i></button>
                                     </form>
                                 </td>
 

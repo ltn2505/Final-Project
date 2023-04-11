@@ -6,19 +6,50 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">{{ __('Create new user') }}</div>
-
                     <div class="card-body">
-                        <form method="POST" action="{{ route('register') }}">
+                        <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                             @csrf
+                            <script>
+                                function previewImage(event) {
+                                    var input = event.target;
+                                    var reader = new FileReader();
+                                    reader.onload = function() {
+                                        var img = document.getElementById('image_review');
+                                        img.src = reader.result;
+                                        img.style.display = 'block';
+                                    }
+                                    reader.readAsDataURL(input.files[0]);
+                                }
+                            </script>
+
+                            <div class="testimonial-item text-center">
+                                <img id="image_review" class="img-fluid rounded-circle mx-auto mb-4" src="{{ asset('img/user.jpg') }}"
+                                    style=" width: 100px; height: 100px; margin-bottom: 0.5rem !important;">
+                                <h5 class="mb-1"></h5>
+                            </div>
 
                             <div class="row mb-3">
-                                <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
+                                <label for="name"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Avatar') }}</label>
+                                <div class="col-md-6">
+                                    <input id="image" type="file"
+                                        class="form-control-file @error('image') is-invalid @enderror" name="image"
+                                        autofocus onchange="previewImage(event)">
+                                    @error('image')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
 
+                            <div class="row mb-3">
+                                <label for="name"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
                                 <div class="col-md-6">
                                     <input id="name" type="text"
                                         class="form-control @error('name') is-invalid @enderror" name="name"
                                         value="{{ old('name') }}" required autocomplete="name" autofocus>
-
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -130,8 +161,9 @@
 
                                 <div class="col-md-6">
                                     <input id="phone_number" type="text"
-                                        class="form-control @error('phone_number') is-invalid @enderror" name="phone_number"
-                                        value="{{ old('phone_number') }}" required autocomplete="phone_number" autofocus>
+                                        class="form-control @error('phone_number') is-invalid @enderror"
+                                        name="phone_number" value="{{ old('phone_number') }}" required
+                                        autocomplete="phone_number" autofocus>
 
                                     @error('phone_number')
                                         <span class="invalid-feedback" role="alert">
@@ -161,23 +193,23 @@
                                 </div>
                             </div>
 
-                                <div class="col-md-6">
-                                    <input id="manager" type="text"
-                                        class="form-control @error('manager') is-invalid @enderror" name="manager"
-                                        value="{{ Auth::user()->name }}" required autocomplete="manager" autofocus
-                                        readonly hidden>
+                            <div class="col-md-6">
+                                <input id="manager" type="text"
+                                    class="form-control @error('manager') is-invalid @enderror" name="manager"
+                                    value="{{ Auth::user()->name }}" required autocomplete="manager" autofocus readonly
+                                    hidden>
 
-                                    @error('manager')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
+                                @error('manager')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
 
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">
-                                        {{ __('Register') }}
+                                        {{ __('Create') }}
                                     </button>
                                 </div>
                             </div>

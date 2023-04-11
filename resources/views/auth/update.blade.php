@@ -15,20 +15,52 @@
                             </button>
                         </div>
                     @endif
+
                     <div class="card-body">
-                        <form method="POST" action="{{ route('user.update', Auth::user()->id) }}">
+                        <form method="POST" action="{{ route('user.update', $user->id) }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
-                            <div class="row mb-3">
-                                <label for="name"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
+                            <script>
+                                function previewImage(event) {
+                                    var input = event.target;
+                                    var reader = new FileReader();
+                                    reader.onload = function() {
+                                        var img = document.getElementById('image_review');
+                                        img.src = reader.result;
+                                        img.style.display = 'block';
+                                    }
+                                    reader.readAsDataURL(input.files[0]);
+                                }
+                            </script>
 
+                            <div class="testimonial-item text-center">
+                                <img id="image_review" class="img-fluid rounded-circle mx-auto mb-4"
+                                    src="{{ asset('img/' . $user->image) }}"
+                                    style=" width: 100px; height: 100px; margin-bottom: 0.5rem !important;">
+                            </div>
+
+                            <div class="row mb-3">
                                 <div class="col-md-6">
                                     <input id="name" type="text"
                                         class="form-control @error('name') is-invalid @enderror" name="name"
-                                        value="{{ $user->name }}" required autocomplete="name" autofocus readonly>
+                                        value="{{ $user->name }}" required autocomplete="name" autofocus readonly hidden>
 
                                     @error('name')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="name"
+                                    class="col-md-4 col-form-label text-md-end">{{ __('Avatar') }}</label>
+                                <div class="col-md-6">
+                                    <input id="image" type="file"
+                                        class="form-control-file @error('image') is-invalid @enderror" name="image"
+                                        autofocus onchange="previewImage(event)">
+                                    @error('image')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>

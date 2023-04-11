@@ -4,6 +4,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SchoolController;
+use App\Http\Controllers\StudentController;
+
+use Illuminate\Http\Request;
+use App\Models\School;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,3 +28,16 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::resource('/user', UserController::class);
 Route::resource('/school', SchoolController::class);
+Route::resource('/student', StudentController::class);
+
+Route::get('/students/import', [StudentController::class, 'importForm'])->name('students.import.form');
+Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
+
+// Route::get('/get-address', function(Request $request) {
+//     $shool_name = $request->input('shool_name');
+
+//     $school = School::where('id', $shool_name)->first();
+//     $address = $school->address;
+
+//     return response()->json(['address' => $address]);
+// });
