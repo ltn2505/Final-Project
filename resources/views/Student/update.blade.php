@@ -112,10 +112,69 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <label for="inputAddressLine2">Status</label>
-                                    <input type="text" name="status" class="form-control" id="inputAddressLine2"
-                                        value="{{ $student->status }}" placeholder="">
+                                    <select class="form-select" name="status" id="status">
+                                        <option value="New" {{ $student->status == 'New' ? 'selected' : '' }}>
+                                            New
+                                        </option>
+                                        <option value="Call back" {{ $student->status == 'Call back' ? 'selected' : '' }}>
+                                            Call back
+                                        </option>
+                                        <option value="Interested"
+                                            {{ $student->status == 'Interested' ? 'selected' : '' }}>
+                                            Interested
+                                        </option>
+                                        <option value="Not interested"
+                                            {{ $student->status == 'Not interested' ? 'selected' : '' }}>
+                                            Not interested
+                                        </option>
+                                        <option value="Student" {{ $student->status == 'Call back' ? 'selected' : '' }}>
+                                            Student
+                                        </option>
+                                        <option value="Call back" {{ $student->status == 'Cancel' ? 'selected' : '' }}>
+                                            Cancel
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <label for="inputPostalCode">Recruitment Method</label>
+                                    <select class="form-select" name="recruitment_method" id="">
+                                        <option value="Choose Method">Choose Method</option>
+                                        @if ($student->points->count() > 0)
+                                            <option value="Grade point average 11"
+                                                {{ $student->points[0]->recruitment_method == 'Grade point average 11' ? 'selected' : '' }}>
+                                                Grade point 11</option>
+                                            <option value="Grade point average 12"
+                                                {{ $student->points[0]->recruitment_method == 'Grade point average 12' ? 'selected' : '' }}>
+                                                Grade point 12</option>
+                                            <option value="Graduation exam score"
+                                                {{ $student->points[0]->recruitment_method == 'Graduation exam score' ? 'selected' : '' }}>
+                                                Graduation exam score</option>
+                                        @else
+                                            <option value="Grade point average 11">
+                                                Grade point 11</option>
+                                            <option value="Grade point average 12">
+                                                Grade point 12</option>
+                                            <option value="Graduation exam score">
+                                                Graduation exam score</option>
+                                        @endif
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="inputAddressLine1">Exam Block</label>
+                                    <input type="text" name="exam_block" class="form-control" id="inputAddressLine1"
+                                        value="{{ $student->points->count() > 0 ? $student->points[0]->exam_block : '' }}">
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="inputAddressLine2">Recruitment Points</label>
+                                    <input type="text" name="recruitment_points" class="form-control"
+                                        id="inputAddressLine2"
+                                        value="{{ $student->points->count() > 0 ? $student->points[0]->recruitment_points : '' }}">
+                                </div>
+
+                            </div>
+
                             <div class="form-group row">
                                 <div class="col-sm-12">
                                     <label for="inputContactNumber">Description</label>

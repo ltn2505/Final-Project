@@ -7,14 +7,14 @@
                 <div class="row">
                     <div class="col-md-10 mx-auto">
                         @if (Session::has('notification'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ Session::get('notification') }}
-                            <button style="float: right; border:none; background:none;" type="button" class="close"
-                                data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                    @endif
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ Session::get('notification') }}
+                                <button style="float: right; border:none; background:none;" type="button" class="close"
+                                    data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
                         <form method="POST" action="{{ route('student.store') }}">
                             @csrf
                             <input type="text" name="user_id" class="form-control" id="inputCity" placeholder=""
@@ -33,7 +33,7 @@
                                 <div class="col-sm-3">
                                     <label for="inputAddressLine1">Gender</label>
                                     <select class="form-select" name="gender">
-                                        <option selected>Open this select menu</option>
+                                        <option value="Gender">Open this select menu</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
                                     </select>
@@ -43,9 +43,9 @@
                                 <div class="col-sm-6">
                                     <label for="inputPostalCode">School Name</label>
                                     <a data-bs-toggle="modal" data-bs-target="#myModal" style="float: right;"
-                                    href="{{ route('school.create') }}"> + Add new</a>
-                                    <select class="form-select" name="school" id="schoolSelect">
-                                        <option value="">Choose School</option>
+                                        href="{{ route('school.create') }}"> + Add new</a>
+                                    <select class="form-select" name="school_id" id="school_id">
+                                        <option value="Choose School">Choose School</option>
                                         @foreach ($school as $sc)
                                             <option value="{{ $sc->id }}" data-address="{{ $sc->address }}"
                                                 data-schoolname="{{ $sc->school_name }}">{{ $sc->school_name }}</option>
@@ -60,10 +60,10 @@
 
                             <script>
                                 $(document).ready(function() {
-                                    $('#schoolSelect').on('change', function() {
+                                    $('#school_id').on('change', function() {
                                         var selectedOption = $(this).find(':selected');
                                         var addressInput = $('#addressInput');
-                                        if(selectedOption.val() !== '') {
+                                        if (selectedOption.val() !== '') {
                                             addressInput.val(selectedOption.data('address'));
                                         } else {
                                             addressInput.val('');
@@ -100,11 +100,42 @@
                                         id="inputAddressLine2" placeholder="">
                                 </div>
                                 <div class="col-sm-3">
-                                    <label for="inputAddressLine2">Status</label>
-                                    <input type="text" name="status" class="form-control" id="inputAddressLine2"
-                                        placeholder="" value="New">
+                                    <label for="inputPostalCode">Status</label>
+                                    <select class="form-select" name="school" id="schoolSelect">
+                                        <option value="New">New</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Call back">Call back</option>
+                                        <option value="Interested">Interested</option>
+                                        <option value="Not interested">Not interested</option>
+                                        <option value="Student">Student</option>
+                                        <option value="Cancel">Cancel</option>
+                                    </select>
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-6">
+                                    <label for="inputPostalCode">Recruitment Method</label>
+                                    <select class="form-select" name="recruitment_method" id="">
+                                        <option value="Choose Method">Choose Method</option>
+                                        <option value="Grade point average 11">Grade point 11</option>
+                                        <option value="Grade point average 12">Grade point 12</option>
+                                        <option value="Graduation exam score">Graduation exam score</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="inputAddressLine1">Exam Block</label>
+                                    <input type="text" name="exam_block" class="form-control" id="inputAddressLine1"
+                                        placeholder="">
+                                </div>
+                                <div class="col-sm-3">
+                                    <label for="inputAddressLine2">Recruitment Points</label>
+                                    <input type="text" name="recruitment_points" class="form-control"
+                                        id="inputAddressLine2" placeholder="">
+                                </div>
+
+                            </div>
+
                             <div class="form-group row">
                                 <div class="col-sm-12">
                                     <label for="inputContactNumber">Description</label>

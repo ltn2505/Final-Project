@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StudentController;
-
+use App\Http\Controllers\OnlineController;
 use Illuminate\Http\Request;
 use App\Models\School;
 /*
@@ -33,11 +33,6 @@ Route::resource('/student', StudentController::class);
 Route::get('/students/import', [StudentController::class, 'importForm'])->name('students.import.form');
 Route::post('/students/import', [StudentController::class, 'import'])->name('students.import');
 
-// Route::get('/get-address', function(Request $request) {
-//     $shool_name = $request->input('shool_name');
-
-//     $school = School::where('id', $shool_name)->first();
-//     $address = $school->address;
-
-//     return response()->json(['address' => $address]);
-// });
+Route::get('/students/chart', [StudentController::class, 'chart'])->name('students.chart');
+Route::post('/students/transform', [StudentController::class, 'transform'])->name('students.transform');
+Route::resource('online', OnlineController::class);

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('phone_number')->unique();
             $table->string('role');
             $table->string('manager');
+            $table->string('image')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

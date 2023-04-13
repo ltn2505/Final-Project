@@ -8,8 +8,8 @@
                 <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                     <i class="fa fa-chart-line fa-3x text-primary"></i>
                     <div class="ms-3">
-                        <p class="mb-2">Today Sale</p>
-                        <h6 class="mb-0">$1234</h6>
+                        <p class="mb-2">Total Student</p>
+                        <h6 class="mb-0">{{ $count }}</h6>
                     </div>
                 </div>
             </div>
@@ -17,7 +17,7 @@
                 <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                     <i class="fa fa-chart-bar fa-3x text-primary"></i>
                     <div class="ms-3">
-                        <p class="mb-2">Total Sale</p>
+                        <p class="mb-2">Status New</p>
                         <h6 class="mb-0">$1234</h6>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                 <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                     <i class="fa fa-chart-area fa-3x text-primary"></i>
                     <div class="ms-3">
-                        <p class="mb-2">Today Revenue</p>
+                        <p class="mb-2">Status Processing</p>
                         <h6 class="mb-0">$1234</h6>
                     </div>
                 </div>
@@ -35,7 +35,7 @@
                 <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                     <i class="fa fa-chart-pie fa-3x text-primary"></i>
                     <div class="ms-3">
-                        <p class="mb-2">Total Revenue</p>
+                        <p class="mb-2">Processed Success</p>
                         <h6 class="mb-0">$1234</h6>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
     <!-- Sale & Revenue End -->
 
     <!-- Sales Chart Start -->
-    <div class="container-fluid pt-4 px-4">
+    {{-- <div class="container-fluid pt-4 px-4">
         <div class="row g-4">
             <div class="col-sm-12 col-xl-6">
                 <div class="bg-light text-center rounded p-4">
@@ -66,7 +66,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
+
+
     <!-- Sales Chart End -->
 
     <!-- Recent Sales Start -->
@@ -75,8 +77,8 @@
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <h6 class="mb-0">Manage User</h6>
                 @if (Route::has('register'))
-                    <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">+
-                        Create new</a>
+                <a href="{{ route('register') }}" class="btn btn-success">
+                    + Create new</a>
                 @endif
 
             </div>

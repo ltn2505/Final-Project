@@ -43,13 +43,13 @@
                     </script>
 
 
-                    <div class="form-group">
+                    <div class="form-group" style="margin-top: 2%;">
                         <label for="file">Select Excel File</label>
                         <input type="file" class="form-control-file" id="file" name="file"
                             accept=".xlsx,.xls,.csv">
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Import</button>
+                    <button style="margin-top: 2%;" type="submit" class="btn btn-primary">Import</button>
                 </form>
             </div>
         </div>

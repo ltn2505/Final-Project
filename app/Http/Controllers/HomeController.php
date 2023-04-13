@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Student;
 
 class HomeController extends Controller
 {
@@ -24,7 +25,9 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $user=User::paginate(10);
-        return view('home',compact('user'));
+        $count = Student::countStudents();
+        $user = User::paginate(10);
+        return view('home',['count' => $count], compact('user'));
     }
+
 }

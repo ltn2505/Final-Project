@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\School;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Point;
 use Illuminate\Foundation\Auth\User as AuthUser;
 
 class Student extends Model
@@ -36,6 +36,7 @@ class Student extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public static function importFromExcel($filename,$schoolId)
     {
         $inputFileType = IOFactory::identify($filename);
@@ -64,4 +65,13 @@ class Student extends Model
             ]);
         }
     }
+    public static function countStudents()
+    {
+        return self::count();
+    }
+    public function points()
+    {
+        return $this->hasMany(Point::class);
+    }
+
 }

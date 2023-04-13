@@ -30,7 +30,9 @@
 
     <!-- Template Stylesheet -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-Gw28KjBh3N3OjW8bN6yDXD9yNvC/5R6fjpb6w/1LAs2Eie0K1Wz2zpRUcwoEd9m+0jupgBm8i1HwZDjc/d+zCg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"
+        integrity="sha512-Gw28KjBh3N3OjW8bN6yDXD9yNvC/5R6fjpb6w/1LAs2Eie0K1Wz2zpRUcwoEd9m+0jupgBm8i1HwZDjc/d+zCg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -54,31 +56,17 @@
                     <h3 class="text-primary">Greenwich - CT</h3>
                 </a>
                 <div class="navbar-nav w-100">
-                    <a href="{{ route('home') }}" class="nav-item nav-link {{ request()->routeIs('home') ? 'active' : '' }}"><i
+                    <a href="{{ route('home') }}"
+                        class="nav-item nav-link {{ request()->routeIs('home') ? 'active' : '' }}"><i
                             class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
-                                class="fa fa-laptop me-2"></i>Elements</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="button.html" class="dropdown-item">Buttons</a>
-                            <a href="typography.html" class="dropdown-item">Typography</a>
-                            <a href="element.html" class="dropdown-item">Other Elements</a>
-                        </div>
-                    </div>
-                    <a href="{{ route('school.index') }}" class="nav-item nav-link {{ request()->routeIs('school.index') ? 'active' : '' }}"><i class="fa fa-th me-2"></i>School</a>
-                    <a href="{{ route('student.index') }}" class="nav-item nav-link {{ request()->routeIs('student.index') ? 'active' : '' }}"><i class="fa fa-keyboard me-2"></i>Student</a>
-                    <a href="table.html" class="nav-item nav-link"><i class="fa fa-table me-2"></i>Tables</a>
-                    <a href="chart.html" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Charts</a>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i
-                                class="far fa-file-alt me-2"></i>Pages</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="signin.html" class="dropdown-item">Sign In</a>
-                            <a href="signup.html" class="dropdown-item">Sign Up</a>
-                            <a href="404.html" class="dropdown-item">404 Error</a>
-                            <a href="blank.html" class="dropdown-item">Blank Page</a>
-                        </div>
-                    </div>
+                    <a href="{{ route('school.index') }}"
+                        class="nav-item nav-link {{ request()->routeIs('school.index') ? 'active' : '' }}"><i
+                            class="fa fa-th me-2"></i>School</a>
+                    <a href="{{ route('student.index') }}"
+                        class="nav-item nav-link {{ request()->routeIs('student.index') ? 'active' : '' }}"><i
+                            class="fa fa-keyboard me-2"></i>Student</a>
+                    <a href="{{ route('students.chart') }}" class="nav-item nav-link"><i
+                            class="fa fa-chart-bar me-2"></i>Charts</a>
                 </div>
             </nav>
         </div>
@@ -94,10 +82,10 @@
             </form>
             <div class="navbar-nav align-items-center ms-auto">
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    {{-- <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                         <i class="fa fa-envelope me-lg-2"></i>
                         <span class="d-none d-lg-inline-flex">Message</span>
-                    </a>
+                    </a> --}}
                     <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                         <a href="#" class="dropdown-item">
                             <div class="d-flex align-items-center">
@@ -136,10 +124,10 @@
                     </div>
                 </div>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                    {{-- <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                         <i class="fa fa-bell me-lg-2"></i>
                         <span class="d-none d-lg-inline-flex">Notificatin</span>
-                    </a>
+                    </a> --}}
                     <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
                         <a href="#" class="dropdown-item">
                             <h6 class="fw-normal mb-0">Profile updated</h6>
@@ -162,12 +150,12 @@
 
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                        <img class="rounded-circle me-lg-2" src="{{ asset('img/'.Auth::user()->image) }}" alt=""
-                            style="width: 40px; height: 40px;">
+                        <img class="rounded-circle me-lg-2" src="{{ asset('img/' . Auth::user()->image) }}"
+                            alt="" style="width: 40px; height: 40px;">
                         <span class="d-none d-lg-inline-flex">{{ Auth::user()->name }}</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
-                        <a href="{{ route('user.edit',Auth::user()->id) }}" class="dropdown-item">My Profile</a>
+                        <a href="{{ route('user.edit', Auth::user()->id) }}" class="dropdown-item">My Profile</a>
                         <a class="dropdown-item" href="{{ route('logout') }}"
                             onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();">
@@ -218,8 +206,12 @@
     <!-- Template Javascript -->
     <script src="{{ asset('js/main.js') }}"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-BJ9IyXa+eU6Pd8/EZJw/rGQlE9A/6RgLzgKwpL9+JGoeq3qWjeihNp/kZcOJh7c0xL+4V7KuBXyXsV7+kFaWtQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha512-4cByz7Lwh4y1FV7X/w/ZtTJ2Q1SjZDrYg7T+0opCvksibIqwOb/Ry78b//9Xmno0vIQIvyHwJYl0gZD3q5v/xA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-BJ9IyXa+eU6Pd8/EZJw/rGQlE9A/6RgLzgKwpL9+JGoeq3qWjeihNp/kZcOJh7c0xL+4V7KuBXyXsV7+kFaWtQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.min.js"
+        integrity="sha512-4cByz7Lwh4y1FV7X/w/ZtTJ2Q1SjZDrYg7T+0opCvksibIqwOb/Ry78b//9Xmno0vIQIvyHwJYl0gZD3q5v/xA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -308,8 +300,9 @@
 
                             <div class="col-md-6">
                                 <input id="phone_number" type="text"
-                                    class="form-control @error('phone_number') is-invalid @enderror" name="phone_number"
-                                    value="{{ old('phone_number') }}" autocomplete="phone_number" autofocus>
+                                    class="form-control @error('phone_number') is-invalid @enderror"
+                                    name="phone_number" value="{{ old('phone_number') }}"
+                                    autocomplete="phone_number" autofocus>
 
                                 @error('phone_number')
                                     <span class="invalid-feedback" role="alert">
@@ -349,7 +342,8 @@
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Close</button>
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Save') }}
                                 </button>

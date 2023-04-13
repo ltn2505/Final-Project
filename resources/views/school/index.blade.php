@@ -6,8 +6,8 @@
             <div class="d-flex align-items-center justify-content-between mb-4">
                 <h6 class="mb-0">Manage User</h6>
                 @if (Route::has('register'))
-                    <a href="{{ route('school.create') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">+
-                        Create new</a>
+                <a href="{{ route('school.create') }}" class="btn btn-success">
+                    + Create new</a>
                 @endif
             </div>
             <div class="table-responsive">
