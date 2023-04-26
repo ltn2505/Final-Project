@@ -183,7 +183,6 @@
                                         <option selected>Open this select menu</option>
                                         <option value="Admin">Admin</option>
                                         <option value="Staff">Staff</option>
-                                        <option value="Collaborator">Collaborator</option>
                                     </select>
                                     @error('role')
                                         <span class="invalid-feedback" role="alert">
@@ -192,20 +191,6 @@
                                     @enderror
                                 </div>
                             </div>
-
-                            <div class="col-md-6">
-                                <input id="manager" type="text"
-                                    class="form-control @error('manager') is-invalid @enderror" name="manager"
-                                    value="{{ Auth::user()->name }}" required autocomplete="manager" autofocus readonly
-                                    hidden>
-
-                                @error('manager')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-4">
                                     <button type="submit" class="btn btn-primary">

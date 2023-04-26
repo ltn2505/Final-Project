@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Student;
 use App\Models\Point;
+use App\Mail\WelcomeEmail;
+use App\Mail\UserMail;
+use Illuminate\Mail\Message;
+use Illuminate\Support\Facades\Mail;
+
 class OnlineController extends Controller
 {
     /**
@@ -45,7 +50,10 @@ class OnlineController extends Controller
             'recruitment_points' => $request->input('recruitment_points'),
         ]);
         $point->save();
-        return redirect()->route('student.index')->with('notification', 'Successfully added new.');
+        Mail::to($student->email)->send(new WelcomeEmail($student));
+        Mail::to($student->user->email)->send(new UserMail($student));
+
+        return redirect()->route('online.index')->with('notification', 'Successfully added new.');
     }
 
     /**
@@ -93,3 +101,4 @@ class OnlineController extends Controller
         //
     }
 }
+

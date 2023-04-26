@@ -5,17 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class School extends Model
+class Todo extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'school_name',
-        'address',
-        'headmaster',
-        'gender',
-        'phone_number',
-        'email',
-        'description',
+        'user_id',
+        'short_task',
+        'completed',
     ];
-    
 }

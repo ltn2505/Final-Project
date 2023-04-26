@@ -1,13 +1,14 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\OnlineController;
-use Illuminate\Http\Request;
-use App\Models\School;
+use App\Http\Controllers\TodoControlller;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,3 +37,7 @@ Route::post('/students/import', [StudentController::class, 'import'])->name('stu
 Route::get('/students/chart', [StudentController::class, 'chart'])->name('students.chart');
 Route::post('/students/transform', [StudentController::class, 'transform'])->name('students.transform');
 Route::resource('online', OnlineController::class);
+Route::get('/students/search', [StudentController::class, 'search'])->name('students.search');
+Route::get('/students/filter', [StudentController::class, 'filter'])->name('students.filter');
+Route::resource('/todos', TodoControlller::class);
+

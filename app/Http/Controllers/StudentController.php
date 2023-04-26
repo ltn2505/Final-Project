@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Student;
-use App\Models\School;
 use App\Models\User;
-use Illuminate\Foundation\Auth\User as AuthUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Point;
 use parentheses;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
@@ -23,10 +22,11 @@ class StudentController extends Controller
     {
         //
         $user = User::all();
-        $student = Student::with('school')->get();
+        $point = Point::all();
         $student = Student::with('user')->get();
-        $student = Student::paginate(50);
-        return view('student.index', compact('student', 'user'));
+        $student = Student::with('point')->get();
+        $student = Student::where('user_id', auth()->id())->orderBy('student_name', 'asc')->paginate(20);
+        return view('student.index', compact('student', 'user', 'point'));
     }
 
     /**
@@ -37,8 +37,7 @@ class StudentController extends Controller
     public function create()
     {
         //
-        $school = School::all();
-        return view('student.create', compact('school'));
+        return view('student.create');
     }
 
     /**
@@ -67,10 +66,6 @@ class StudentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -81,9 +76,8 @@ class StudentController extends Controller
     public function edit(Student $student)
     {
         //
-        $school = School::all();
         $point = Student::with('points')->find($student->id);
-        return view('student.update', compact('student', 'school', 'point'));
+        return view('student.update', compact('student', 'point'));
     }
 
     /**
@@ -96,8 +90,28 @@ class StudentController extends Controller
     public function update(Request $request, Student $student)
     {
         //
+        $input = $request->all();
+        $request->validate([
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+        if ($student->image) {
+            // Get the path to the old image
+            $oldImagePath = public_path('img').$student->image;
 
-        $student->update($request->all());
+            // Delete the old image
+            Storage::delete($oldImagePath);
+        }
+        if($image=$request->file('image')){
+            $destinationPath=public_path('img/student');
+            $studentImage=date('YmdHis').".".$image->getClientOriginalExtension();
+            $image->move($destinationPath,$studentImage);
+            $input['image']=$studentImage;
+        }else{
+            unset($input['image']);
+        }
+
+        // $student->update($request->all());
+        $student->update($input);
         if ($student->points->count() > 0) {
             $student->points[0]->update([
                 'recruitment_method' => $request->input('recruitment_method'),
@@ -127,13 +141,18 @@ class StudentController extends Controller
     public function destroy(Student $student)
     {
         //
+        if ($student->points->count() > 0) {
+            $student->point->delete();
+        }
+
         $student->delete();
-        return redirect()->route('student.index')->with('notification', 'Successfully deleted account');
+        return redirect()->back()->with('notification', 'Successfully deleted account');
     }
 
     public function transform(Request $request)
     {
         $studentID = $request->studentID;
+
         $userID = $request->user_id;
 
         foreach ($studentID as $student) {
@@ -148,62 +167,150 @@ class StudentController extends Controller
 
     public function importForm()
     {
-        $school = School::all();
-        return view('student.import', compact('school'));
+        return view('student.import');
     }
 
     public function import(Request $request)
     {
-        $schoolId = $request->input('school');
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv'
         ]);
-
         $filename = $request->file('file')->getRealPath();
-        Student::importFromExcel($filename, $schoolId);
+        Student::importFromExcel($filename);
 
         return redirect()->route('student.index')->with('notification', 'Students imported successfully!');
     }
 
-    public function chart()
+    public function search(Request $request)
     {
-        $statuses = Student::select('status', DB::raw('count(*) as total'))
-            ->groupBy('status')
-            ->get()
-            ->pluck('total', 'status');
+        $user = User::all();
+        $point = Point::all();
+        $query = $request->input('query');
+        $student = Student::where('student_name', 'LIKE', '%' . $query . '%')
+            ->orWhere('mobile', 'LIKE', '%' . $query . '%')
+            ->orWhere('email', 'LIKE', '%' . $query . '%')
+            ->orWhere('status', 'LIKE', '%' . $query . '%')
+            ->paginate(20);
 
-        $data = [
-            'labels' => $statuses->keys(),
-            'datasets' => [
-                [
-                    'label' => 'Students by status',
-                    'data' => $statuses->values(),
-                    'backgroundColor' => ['#36a2eb', '#ff6384', '#4bc0c0', '#ffcd56'],
-                ],
-            ],
-        ];
+        return  view('student.index', compact('student', 'user', 'point', 'query'));
+    }
 
-        $userId = Auth::id();
+    public function filter(Request $request)
+    {
+        if(Auth::user()->role=="Admin"){
+            $user_id = auth()->id();
+            $user = User::all();
+            $query = $request->input('student_name');
+            $query_school_name = $request->input('school_name');
+            $query_phone = $request->input('mobile');
+            $query_email = $request->input('email');
+            $query_register = $request->input('specialized_register');
+            $query_status = $request->input('status');
+            $query_exam_block = $request->input('exam_block');
+            $query_points_min = $request->input('points_min');
+            $query_points_max = $request->input('points_max');
 
-        $student_byId = Student::select('user_id', DB::raw('count(*) as total'))
-            ->groupBy('user_id')
-            ->get()
-            ->pluck('total', 'user_id');
+            $student = Student::leftJoin('points', 'students.id', '=', 'points.student_id')
+                ->select('students.*', 'points.recruitment_points')
+                ->where(function ($queryBuilder) use ($query, $query_school_name, $query_phone, $query_email, $query_register, $query_status, $query_points_min, $query_points_max, $query_exam_block) {
+                    if (!empty($query)) {
+                        $queryBuilder->where('student_name', 'like', "%$query%")
+                            ->orWhere('school_name', 'like', "%$query%")
+                            ->orWhere('mobile', 'like', "%$query%")
+                            ->orWhere('email', 'like', "%$query%")
+                            ->orWhere('specialized_register', 'like', "$query")
+                            ->orWhere('status', 'like', "$query");
+                    }
+                    if (!empty($query_phone)) {
+                        $queryBuilder->where('mobile', $query_phone);
+                    }
+                    if (!empty($query_school_name)) {
+                        $queryBuilder->where('school_name', $query_school_name);
+                    }
+                    if (!empty($query_email)) {
+                        $queryBuilder->where('email', $query_email);
+                    }
+                    if (!empty($query_register)) {
+                        $queryBuilder->where('specialized_register', $query_register);
+                    }
+                    if (!empty($query_status)) {
+                        $queryBuilder->where('status', $query_status);
+                    }
+                    if (!empty($query_exam_block)) {
+                        $queryBuilder->where('points.exam_block', 'like', $query_exam_block);
+                    }
+                    if (!empty($query_points_min)) {
+                        $queryBuilder->where('points.recruitment_points', '>=', $query_points_min);
+                    }
+                    if (!empty($query_points_max)) {
+                        $queryBuilder->where('points.recruitment_points', '<=', $query_points_max);
+                    }
+                })
+                ->orderBy('students.id')
+                ->paginate(20);
+        }
+        else{
+            $user_id = auth()->id();
+            $user = User::all();
+            $query = $request->input('student_name');
+            $query_school_name = $request->input('school_name');
+            $query_phone = $request->input('mobile');
+            $query_email = $request->input('email');
+            $query_register = $request->input('specialized_register');
+            $query_status = $request->input('status');
+            $query_exam_block = $request->input('exam_block');
+            $query_points_min = $request->input('points_min');
+            $query_points_max = $request->input('points_max');
 
-        $userNames = User::whereIn('id', $student_byId->keys())->pluck('name', 'id');
+            $student = Student::leftJoin('points', 'students.id', '=', 'points.student_id')
+                ->select('students.*', 'points.recruitment_points')
+                ->where('user_id', $user_id)
+                ->where(function ($queryBuilder) use ($query, $query_school_name, $query_phone, $query_email, $query_register, $query_status, $query_points_min, $query_points_max, $query_exam_block) {
+                    if (!empty($query)) {
+                        $queryBuilder->where('student_name', 'like', "%$query%")
+                            ->orWhere('school_name', 'like', "%$query%")
+                            ->orWhere('mobile', 'like', "%$query%")
+                            ->orWhere('email', 'like', "%$query%")
+                            ->orWhere('specialized_register', 'like', "$query")
+                            ->orWhere('status', 'like', "$query");
+                    }
+                    if (!empty($query_phone)) {
+                        $queryBuilder->where('mobile', $query_phone);
+                    }
+                    if (!empty($query_school_name)) {
+                        $queryBuilder->where('school_name', $query_school_name);
+                    }
+                    if (!empty($query_email)) {
+                        $queryBuilder->where('email', $query_email);
+                    }
+                    if (!empty($query_register)) {
+                        $queryBuilder->where('specialized_register', $query_register);
+                    }
+                    if (!empty($query_status)) {
+                        $queryBuilder->where('status', $query_status);
+                    }
+                    if (!empty($query_exam_block)) {
+                        $queryBuilder->where('points.exam_block', 'like', $query_exam_block);
+                    }
+                    if (!empty($query_points_min)) {
+                        $queryBuilder->where('points.recruitment_points', '>=', $query_points_min);
+                    }
+                    if (!empty($query_points_max)) {
+                        $queryBuilder->where('points.recruitment_points', '<=', $query_points_max);
+                    }
+                })
+                ->orderBy('students.id')
+                ->paginate(20);
+        }
 
-        $data1 = [
-            'labels' =>  $userNames->values(),
-            'datasets' => [
-                [
-                    'label' => 'Students by user',
-                    'data' => $student_byId->values(),
-                    'backgroundColor' => ['#36a2eb', '#ff6384', '#4bc0c0', '#ffcd56'],
-                ],
-            ],
-        ];
+        $student->appends(request()->query());
+        return view('student.index', compact('student', 'user', 'query'));
+    }
 
-
-        return view('student.chart', compact('data', 'data1'));
+    public function show(Student $student)
+    {
+        //
+        $point = Student::with('points')->find($student->id);
+        return view('student.details', compact('student', 'point'));
     }
 }

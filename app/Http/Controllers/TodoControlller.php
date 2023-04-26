@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\School;
+use App\Models\Todo;
 use Illuminate\Http\Request;
 
-class SchoolController extends Controller
+class TodoControlller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,6 @@ class SchoolController extends Controller
      */
     public function index()
     {
-        //
-        $school=School::paginate(10);
-        return view('school.index',compact('school'));
     }
 
     /**
@@ -27,7 +24,6 @@ class SchoolController extends Controller
     public function create()
     {
         //
-        return view('school.create');
     }
 
     /**
@@ -39,8 +35,8 @@ class SchoolController extends Controller
     public function store(Request $request)
     {
         //
-        School::create($request->all());
-        return redirect()->back()->with('notification', 'Successfully added new school.');
+        $todos = Todo::create($request->all());
+        return redirect()->back();
     }
 
     /**
@@ -60,10 +56,9 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(School $school)
+    public function edit($id)
     {
         //
-        return view('school.update',compact('school'));
     }
 
     /**
@@ -73,11 +68,13 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, School $school)
+    public function update(Request $request, $id)
     {
-        //
-        $school->update($request->all());
-        return redirect()->route('school.index')->with('notification','Successfully edited account');
+        $todo = Todo::findOrFail($id);
+        $todo->completed = $request->input('completed');
+        $todo->save();
+
+        return response()->json(['success' => true]);
     }
 
     /**
@@ -86,10 +83,9 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(School $school)
+    public function destroy(Todo $todo)
     {
-        //
-        $school->delete();
-        return redirect()->route('school.index')->with('notification','Successfully deleted account');
+        $todo->delete();
+        return redirect()->back();
     }
 }

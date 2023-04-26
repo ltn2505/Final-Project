@@ -173,22 +173,6 @@
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                                <label for="manager"
-                                    class="col-md-4 col-form-label text-md-end">{{ __('Manager') }}</label>
-                                <div class="col-md-6">
-                                    <input id="manager" type="text"
-                                        class="form-control @error('manager') is-invalid @enderror" name="manager"
-                                        value="{{ $user->manager }}" required autocomplete="manager" autofocus readonly
-                                        readonly>
-
-                                    @error('manager')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
 
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-4">

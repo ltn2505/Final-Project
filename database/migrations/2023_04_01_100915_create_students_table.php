@@ -16,11 +16,11 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('school_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('school_id')->references('id')->on('schools');
             $table->string('student_name')->nullable();
+            $table->string('school_name')->nullable();
             $table->string('class')->nullable();
+            $table->string('address')->nullable();
             $table->string('gender')->nullable();
             $table->string('mobile')->nullable();
             $table->string('other_phone')->nullable();
@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('specialized_register')->nullable();
             $table->string('description')->nullable();
             $table->string('status')->default('New');
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

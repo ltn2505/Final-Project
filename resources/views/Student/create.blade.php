@@ -41,37 +41,14 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6">
-                                    <label for="inputPostalCode">School Name</label>
-                                    <a data-bs-toggle="modal" data-bs-target="#myModal" style="float: right;"
-                                        href="{{ route('school.create') }}"> + Add new</a>
-                                    <select class="form-select" name="school_id" id="school_id">
-                                        <option value="Choose School">Choose School</option>
-                                        @foreach ($school as $sc)
-                                            <option value="{{ $sc->id }}" data-address="{{ $sc->address }}"
-                                                data-schoolname="{{ $sc->school_name }}">{{ $sc->school_name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="inputLastname">School</label>
+                                    <input type="text" name="school_name" id="addressInput" class="form-control">
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="inputLastname">Address</label>
-                                    <input type="text" name="address" id="addressInput" class="form-control" readonly>
+                                    <input type="text" name="address" id="addressInput" class="form-control">
                                 </div>
                             </div>
-
-                            <script>
-                                $(document).ready(function() {
-                                    $('#school_id').on('change', function() {
-                                        var selectedOption = $(this).find(':selected');
-                                        var addressInput = $('#addressInput');
-                                        if (selectedOption.val() !== '') {
-                                            addressInput.val(selectedOption.data('address'));
-                                        } else {
-                                            addressInput.val('');
-                                        }
-                                    });
-                                });
-                            </script>
-
                             <div class="form-group row">
                                 <div class="col-sm-6">
                                     <label for="inputCity">Number Phone</label>
@@ -91,7 +68,7 @@
                             <div class="form-group row">
                                 <div class="col-sm-6">
                                     <label for="inputAddressLine1">Email</label>
-                                    <input type="text" name="email" class="form-control" id="inputAddressLine1"
+                                    <input type="email" name="email" class="form-control" id="inputAddressLine1"
                                         placeholder="">
                                 </div>
                                 <div class="col-sm-3">
@@ -101,7 +78,7 @@
                                 </div>
                                 <div class="col-sm-3">
                                     <label for="inputPostalCode">Status</label>
-                                    <select class="form-select" name="school" id="schoolSelect">
+                                    <select class="form-select" name="status" id="schoolSelect">
                                         <option value="New">New</option>
                                         <option value="Online">Online</option>
                                         <option value="Call back">Call back</option>
@@ -142,8 +119,9 @@
                                     <textarea name="description" class="form-control" id="description" style="height: 150px;"></textarea>
                                 </div>
                             </div>
-                            <button style="margin-top: 10px" type="submit"
-                                class="btn btn-primary px-4 float-right">{{ __('Save') }}</button>
+                            <button type="submit"
+                                class="btn btn-primary px-4 float-right mt-4">{{ __('Save') }}</button>
+                            <a href="{{ url()->previous() }}" class="btn btn-primary mt-4 ml-4">Cancel</a>
                         </form>
                     </div>
                 </div>
@@ -151,4 +129,3 @@
         </div>
     </div>
 @endsection
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

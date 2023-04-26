@@ -26,7 +26,6 @@ class User extends Authenticatable
         'dob',
         'phone_number',
         'role',
-        'manager',
         'image',
 
     ];

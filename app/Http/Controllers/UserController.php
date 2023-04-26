@@ -18,7 +18,8 @@ class UserController extends Controller
     public function index()
     {
         //
-
+        $user = User::paginate(50);
+        return view('auth.index', compact('user'));
 
     }
 
@@ -77,6 +78,9 @@ class UserController extends Controller
     {
         //
         $input = $request->all();
+        $request->validate([
+            'image' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
         if ($user->image) {
             // Get the path to the old image
             $oldImagePath = public_path('img').$user->image;
