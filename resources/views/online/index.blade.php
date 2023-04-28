@@ -259,7 +259,7 @@
     <div class="container-xxl py-5">
         <div class="container">
             <div class="row g-5">
-                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s">
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" id="register">
                     <p class="fs-5 fw-medium text-primary">Get Help</p>
                     <h1 class="display-5 mb-4">Need Our Help? We're Here!</h1>
                     <p>Greenwich Vietnam is an international joint program between the University of Greenwich,
